@@ -32,3 +32,7 @@ firebase deploy --only hosting
 ```
 
 The project already includes `.firebaserc` and `firebase.json` for static hosting from `build/web`.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
