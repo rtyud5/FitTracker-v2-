@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fittracker_source/core/app_colors.dart';
 
 class ProfileHeaderSection extends StatelessWidget {
   final String name;
@@ -9,6 +10,7 @@ class ProfileHeaderSection extends StatelessWidget {
   final File? avatarFile;
   final VoidCallback onPickAvatar;
   final VoidCallback onOpenSettings;
+  final VoidCallback? onEditProfile;
 
   const ProfileHeaderSection({
     super.key,
@@ -18,78 +20,83 @@ class ProfileHeaderSection extends StatelessWidget {
     required this.avatarFile,
     required this.onPickAvatar,
     required this.onOpenSettings,
+    this.onEditProfile,
   });
 
   @override
   Widget build(BuildContext context) {
-    final joinedText = accountCreatedDate == null
-        ? 'Welcome back'
-        : 'Joined ${accountCreatedDate!.day.toString().padLeft(2, '0')}/${accountCreatedDate!.month.toString().padLeft(2, '0')}/${accountCreatedDate!.year}';
-
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.teal.shade50,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        children: [
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 38,
-                backgroundColor: Colors.teal.shade100,
-                backgroundImage: avatarFile != null ? FileImage(avatarFile!) : null,
-                child: avatarFile == null
-                    ? const Icon(Icons.person, size: 38, color: Colors.teal)
-                    : null,
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: InkWell(
-                  onTap: onPickAvatar,
-                  child: const CircleAvatar(
-                    radius: 14,
-                    backgroundColor: Colors.black87,
-                    child: Icon(Icons.edit, color: Colors.white, size: 14),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            CircleAvatar(
+              radius: 40,
+              backgroundColor: const Color(0xFF1ABC9C), // App-like green color for avatar background
+              backgroundImage: avatarFile != null ? FileImage(avatarFile!) : null,
+              child: avatarFile == null
+                  ? Text(
+                      name.isNotEmpty ? name[0].toUpperCase() : 'U',
+                      style: const TextStyle(fontSize: 40, color: Colors.white),
+                    )
+                  : null,
+            ),
+            Positioned(
+              right: -4,
+              bottom: -4,
+              child: InkWell(
+                onTap: onPickAvatar,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
                   ),
+                  child: const Icon(Icons.edit, color: Colors.grey, size: 16),
                 ),
               ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          Expanded(
+            ),
+          ],
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                Row(
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppColors.darkText),
+                    ),
+                    const SizedBox(width: 8),
+                    if (onEditProfile != null)
+                      InkWell(
+                        onTap: onEditProfile,
+                        child: const Icon(Icons.edit, size: 16, color: AppColors.darkText),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 4),
                 Text(
                   goal,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.teal.shade800,
-                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF10463A), // Dark Green for goal
                   ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  joinedText,
-                  style: const TextStyle(fontSize: 13, color: Colors.black54),
                 ),
               ],
             ),
           ),
-          IconButton(
-            onPressed: onOpenSettings,
-            icon: const Icon(Icons.settings_outlined),
-          ),
-        ],
-      ),
+        ),
+        IconButton(
+          onPressed: onOpenSettings,
+          icon: const Icon(Icons.settings, color: AppColors.darkText),
+        ),
+      ],
     );
   }
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fittracker_source/core/app_colors.dart';
 
 class ProfileSummaryCards extends StatelessWidget {
-  final double startWeightLbs;
-  final double currentWeightLbs;
-  final double goalWeightLbs;
+  final double startWeightLbs; // Kept for compatibility but unused here
+  final double currentWeightLbs; // Kept for compatibility but unused here
+  final double goalWeightLbs; // Kept for compatibility but unused here
   final double? bmi;
   final int dailyCalories;
 
@@ -16,52 +17,44 @@ class ProfileSummaryCards extends StatelessWidget {
     required this.dailyCalories,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 1.5,
-      children: [
-        _StatCard(title: 'Start weight', value: '${startWeightLbs.toStringAsFixed(1)} lbs'),
-        _StatCard(title: 'Current weight', value: '${currentWeightLbs.toStringAsFixed(1)} lbs'),
-        _StatCard(title: 'Goal weight', value: '${goalWeightLbs.toStringAsFixed(1)} lbs'),
-        _StatCard(title: 'BMI / Calories', value: '${bmi?.toStringAsFixed(1) ?? '-'} / $dailyCalories'),
-      ],
-    );
+  String _getBmiLabel(double bmiVal) {
+    if (bmiVal < 18.5) return 'Underweight';
+    if (bmiVal < 25) return 'Normal';
+    if (bmiVal < 30) return 'Overweight';
+    return 'Obese';
   }
-}
-
-class _StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _StatCard({required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.teal.shade100),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(title, style: const TextStyle(fontSize: 13, color: Colors.black54)),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+    String bmiString = bmi?.toStringAsFixed(1) ?? '-';
+    String bmiLabel = bmi != null ? ' (${_getBmiLabel(bmi!)})' : '';
+
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
           ),
-        ],
-      ),
+          child: Text(
+            '$dailyCalories Cal / d',
+            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.darkText, fontSize: 14),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: const Color(0xFFCBE3DB), // Very light mint
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            'BMI $bmiString$bmiLabel',
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF10463A), fontSize: 14),
+          ),
+        ),
+      ],
     );
   }
 }

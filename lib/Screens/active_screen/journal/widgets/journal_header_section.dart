@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fittracker_source/core/app_colors.dart';
 
 class JournalHeaderSection extends StatelessWidget {
   final String userName;
@@ -12,26 +13,29 @@ class JournalHeaderSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final dateLabel = '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.smart_toy_outlined, color: AppColors.darkText, size: 28),
+        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
             children: [
+              const Icon(Icons.local_fire_department, color: AppColors.fireIconColor, size: 20),
+              const SizedBox(width: 4),
               Text(
-                'Hello, $userName',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+                '0',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: AppColors.darkText),
               ),
-              const SizedBox(height: 4),
-              Text(dateLabel, style: const TextStyle(color: Colors.black54)),
             ],
           ),
-        ),
-        IconButton(
-          onPressed: onOpenProfile,
-          icon: const Icon(Icons.person_outline),
         ),
       ],
     );

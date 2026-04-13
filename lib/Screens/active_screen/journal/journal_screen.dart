@@ -52,76 +52,84 @@ class _JournalScreenState extends State<JournalScreen> {
       builder: (context, _) {
         final data = _controller.data;
         return Scaffold(
-          appBar: AppBar(title: const Text('Journal')),
+          backgroundColor: const Color(0xFFCEE8E0), // Mint Background
           body: _controller.isLoading
               ? const Center(child: CircularProgressIndicator())
               : data == null
                   ? Center(child: Text(_controller.errorMessage ?? 'No journal data found'))
-                  : RefreshIndicator(
-                      onRefresh: _controller.load,
-                      child: ListView(
-                        padding: const EdgeInsets.all(16),
-                        children: [
-                          JournalHeaderSection(
-                            userName: data.displayName,
-                            onOpenProfile: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          DailyProgressSection(
-                            consumedCalories: _controller.totalCaloriesConsumed,
-                            targetCalories: data.dailyCaloriesTarget,
-                          ),
-                          const SizedBox(height: 16),
-                          MealCardsSection(
-                            meals: {
-                              for (final type in MealType.values)
-                                type: data.meals[type] ?? Meal.empty(type),
-                            },
-                            mealTargets: data.mealTargets,
-                            onOpenMeal: _openMeal,
-                          ),
-                          const SizedBox(height: 16),
-                          MacroTargetsSection(
-                            protein: _controller.totalProteinConsumed,
-                            fat: _controller.totalFatConsumed,
-                            carbs: _controller.totalCarbsConsumed,
-                            fiber: _controller.totalFiberConsumed,
-                            targets: data.dailyMacroTargets,
-                          ),
-                          const SizedBox(height: 16),
-                          WaterTrackerSection(
-                            cupsDrank: _controller.cupsDrank,
-                            totalCupsGoal: _controller.totalCupsGoal,
-                            waterDrankLiters: _controller.waterDrankLiters,
-                            goalLiters: data.waterGoalLiters,
-                            onDecrease: () { _controller.decrementWater(); },
-                            onIncrease: () { _controller.incrementWater(); },
-                          ),
-                          const SizedBox(height: 16),
-                          JournalActionsSection(
-                            onOpenAiAssistant: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const AIAgentScreen()),
-                              );
-                            },
-                            onOpenProfile: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const ProfileScreen()),
-                              );
-                            },
-                          ),
-                        ],
+                  : SafeArea(
+                      child: RefreshIndicator(
+                        onRefresh: _controller.load,
+                        child: ListView(
+                          padding: const EdgeInsets.all(16),
+                          children: [
+                            JournalHeaderSection(
+                              userName: data.displayName,
+                              onOpenProfile: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 24),
+                            DailyProgressSection(
+                              consumedCalories: _controller.totalCaloriesConsumed,
+                              targetCalories: data.dailyCaloriesTarget,
+                            ),
+                            const SizedBox(height: 24),
+                            MacroTargetsSection(
+                              protein: _controller.totalProteinConsumed,
+                              fat: _controller.totalFatConsumed,
+                              carbs: _controller.totalCarbsConsumed,
+                              fiber: _controller.totalFiberConsumed,
+                              targets: data.dailyMacroTargets,
+                            ),
+                            const SizedBox(height: 16),
+                            MealCardsSection(
+                              meals: {
+                                for (final type in MealType.values)
+                                  type: data.meals[type] ?? Meal.empty(type),
+                              },
+                              mealTargets: data.mealTargets,
+                              onOpenMeal: _openMeal,
+                            ),
+                            const SizedBox(height: 16),
+                            WaterTrackerSection(
+                              cupsDrank: _controller.cupsDrank,
+                              totalCupsGoal: _controller.totalCupsGoal,
+                              waterDrankLiters: _controller.waterDrankLiters,
+                              goalLiters: data.waterGoalLiters,
+                              onDecrease: () { _controller.decrementWater(); },
+                              onIncrease: () { _controller.incrementWater(); },
+                            ),
+                            const SizedBox(height: 16),
+                            JournalActionsSection(
+                              onOpenAiAssistant: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const AIAgentScreen()),
+                                );
+                              },
+                              onOpenProfile: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.white,
+            selectedItemColor: const Color(0xFF10463A), // Primary Action
+            unselectedItemColor: Colors.grey.shade400,
             currentIndex: 0,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
             onTap: (index) {
               if (index == 1) {
                 Navigator.pushReplacement(
@@ -131,8 +139,8 @@ class _JournalScreenState extends State<JournalScreen> {
               }
             },
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.menu_book_outlined), label: 'Journal'),
-              BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Profile'),
+              BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Journal'),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
             ],
           ),
         );

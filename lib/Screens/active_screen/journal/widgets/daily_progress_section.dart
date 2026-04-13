@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fittracker_source/core/app_colors.dart';
 
 class DailyProgressSection extends StatelessWidget {
   final int consumedCalories;
@@ -12,34 +13,69 @@ class DailyProgressSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = targetCalories <= 0 ? 0.0 : (consumedCalories / targetCalories).clamp(0.0, 1.0);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.teal.shade50,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Daily progress',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+    // Determine calories left. Using safe min of 0 for UI.
+    final calLeft = (targetCalories - consumedCalories).clamp(0, targetCalories);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        // Eaten
+        Column(
+          children: [
+            Text(
+              consumedCalories.toString(),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Eaten',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.darkText),
+            ),
+          ],
+        ),
+
+        // Calories Left Circle
+        Container(
+          width: 120,
+          height: 120,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFF91B8AA), // Darker mint green for the circle
           ),
-          const SizedBox(height: 8),
-          Text(
-            '$consumedCalories / $targetCalories kcal',
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                calLeft.toString(),
+                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              const Text(
+                'Cal',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.darkText),
+              ),
+              const Text(
+                'left',
+                style: TextStyle(fontSize: 14, color: AppColors.darkText),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
-          LinearProgressIndicator(
-            value: progress,
-            minHeight: 10,
-            backgroundColor: Colors.white,
-            color: Colors.teal,
-          ),
-        ],
-      ),
+        ),
+
+        // Burned (Mocked as 0 for now as there's no explicitly passed burned calories)
+        Column(
+          children: [
+            const Text(
+              '0',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'Burned',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.darkText),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
