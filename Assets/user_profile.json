@@ -1,0 +1,17 @@
+{
+  "userId": "",
+  "username": "",
+  "password": "",
+  "name": "",
+  "gender": "",
+  "age": 0,
+  "height": 0,
+  "weight": 0,
+  "lifestyle": "",
+  "hasDietaryRestrictions": false,
+  "dietaryRestrictionsList": [],
+  "healthGoal": "",
+  "targetWeight": 0,
+  "isSetupComplete": false,
+  "registeredAt": null
+}
